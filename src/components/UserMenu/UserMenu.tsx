@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useOktaAuth } from '@okta/okta-react';
 
 import AccountCircle from '../../icons/AccountCircle';
 import Favorite from '../../icons/Favorite';
@@ -11,7 +12,7 @@ import MenuButton from '../MenuButton/MenuButton';
 
 import styles from './UserMenu.module.scss';
 
-import { logout } from '#src/stores/AccountController';
+// import { logout } from '#src/stores/AccountController';
 
 type Props = {
   inPopover?: boolean;
@@ -22,15 +23,18 @@ type Props = {
 const UserMenu = ({ showPaymentsItem, inPopover = false, onClick }: Props) => {
   const { t } = useTranslation('user');
   const history = useHistory();
+  const auth = useOktaAuth();
 
   const onLogout = useCallback(() => {
     if (onClick) {
       onClick();
     }
 
-    logout();
+    // logout();
+    auth.oktaAuth.signOut();
+
     history.replace('/');
-  }, [onClick, history]);
+  }, [onClick, history, auth]);
 
   const menuItems = (
     <ul className={styles.menuItems}>

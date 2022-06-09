@@ -1,6 +1,7 @@
 import React, { ReactFragment, useState } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useOktaAuth } from '@okta/okta-react';
 
 import AccountCircle from '../../icons/AccountCircle';
 import SearchBar, { Props as SearchBarProps } from '../SearchBar/SearchBar';
@@ -63,6 +64,7 @@ const Header: React.FC<Props> = ({
     [styles.brandCentered]: breakpoint <= Breakpoint.sm,
     [styles.mobileSearchActive]: searchActive && breakpoint <= Breakpoint.sm,
   });
+  const auth = useOktaAuth();
 
   const search =
     breakpoint <= Breakpoint.sm ? (
@@ -101,7 +103,7 @@ const Header: React.FC<Props> = ({
   const renderUserActions = () => {
     if (!canLogin || breakpoint <= Breakpoint.sm) return null;
 
-    return isLoggedIn ? (
+    return auth?.authState?.isAuthenticated ? (
       <React.Fragment>
         <IconButton
           className={classNames(styles.iconButton, styles.userMenuButton)}
