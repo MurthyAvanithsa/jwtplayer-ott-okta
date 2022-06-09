@@ -1,49 +1,46 @@
 @use "theme";
 @use "variables";
 @use "./mixins/responsive";
-
 :root {
-  --primary-color: #{theme.$primary-color};
-
-  --body-background-color: #{theme.$body-bg-color};
-  --body-font-family: #{theme.$body-font-family};
-  --body-alt-font-family: #{theme.$body-alt-font-family};
-  --body-font-weight-regular: #{theme.$body-font-weight-regular};
-  --body-font-weight-bold: #{theme.$body-font-weight-bold};
-  --body-color: #{theme.$body-color};
-
-  --card-color: #{theme.$card-color};
-  --card-border-hover-color: #{theme.$card-border-hover-color};
-  --card-tag-bg: #{theme.$card-tag-bg};
+    --primary-color: #{theme.$primary-color};
+    --body-background-color: #{theme.$body-bg-color};
+    --body-font-family: #{theme.$body-font-family};
+    --body-alt-font-family: #{theme.$body-alt-font-family};
+    --body-font-weight-regular: #{theme.$body-font-weight-regular};
+    --body-font-weight-bold: #{theme.$body-font-weight-bold};
+    --body-color: #{theme.$body-color};
+    --card-color: #{theme.$card-color};
+    --card-border-hover-color: #{theme.$card-border-hover-color};
+    --card-tag-bg: #{theme.$card-tag-bg};
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  color: var(--body-color);
-  font-family: var(--body-font-family);
-  font-size: variables.$body-font-size;
-  background-color: var(--body-background-color);
-  -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    color: var(--body-color);
+    font-family: var(--body-font-family);
+    font-size: variables.$body-font-size;
+    background-color: var(--body-background-color);
+    -webkit-font-smoothing: antialiased;
 }
 
 button {
-  width: auto;
-  margin: 0;
-  padding: 0;
-  overflow: visible;
-  color: inherit;
-  font: inherit;
-  line-height: normal;
-  background: transparent;
-  border: none;
-  border: 0;
-  outline: none;
-  appearance: none;
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    color: inherit;
+    font: inherit;
+    line-height: normal;
+    background: transparent;
+    border: none;
+    border: 0;
+    outline: none;
+    appearance: none;
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
 }
 
 h1,
@@ -52,19 +49,44 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0;
-  padding: 0;
-  font: inherit;
+    margin: 0;
+    padding: 0;
+    font: inherit;
 }
 
 *,
 ::after,
 ::before {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 @include responsive.mobile-and-tablet() {
-  body {
-    font-size: 18px;
-  }
+    body {
+        font-size: 18px;
+    }
+}
+
+#okta-sign-in.auth-container.main-container {
+    $base-color: #202020;
+    background-color: $base-color;
+}
+
+// #okta-sign-in.auth-container .o-form-head {
+//     $okta-text-color: #ffff;
+//     color: $okta-text-color;
+// }
+// #okta-sign-in.auth-container a.link:link {
+//     $okta-link-color: #ffff;
+//     color: $okta-link-color;
+// }
+#okta-sign-in * {
+    $okta-link-color: #ffff;
+    color: $okta-link-color;
+}
+
+#okta-sign-in.auth-container .button-primary {
+    $okta-button-color: #ffff;
+    $okta-link-color: rgb(28, 28, 28);
+    color: $okta-link-color;
+    background: $okta-button-color;
 }
