@@ -29,14 +29,25 @@ import { useOktaAuth } from '@okta/okta-react';
 const PUBLIC_VIEWS = ['login', 'create-account', 'forgot-password', 'reset-password', 'send-confirmation', 'edit-password'];
 
 const oktaSignInConfig = {
-  baseUrl: 'https://dev-00964696.okta.com',
-  clientId: '0oa5bx8lok59myqWo5d7',
+  baseUrl: 'https://venuokta.oktapreview.com',
+  clientId: '0oa19fxless7exPvV0h8',
   redirectUri: window.location.origin + '/login/callback',
-  authParams: {
-    // If your app is configured to use the Implicit flow
-    // instead of the Authorization Code with Proof of Code Key Exchange (PKCE)
-    // you will need to uncomment the below line
-    // pkce: false
+  // authParams: {
+  //   // If your app is configured to use the Implicit flow
+  //   // instead of the Authorization Code with Proof of Code Key Exchange (PKCE)
+  //   // you will need to uncomment the below line
+  //   // pkce: false
+  // },
+  flow: 'signup',
+
+  features: {
+    registration: true, // Enable self-service registration flow
+    rememberMe: true, // Setting to false will remove the checkbox to save username
+    //multiOptionalFactorEnroll: true,            // Allow users to enroll in multiple optional factors before finishing the authentication flow.
+    //selfServiceUnlock: true,                    // Will enable unlock in addition to forgotten password
+    //smsRecovery: true,                          // Enable SMS-based account recovery
+    //callRecovery: true,                         // Enable voice call-based account recovery
+    router: true, // Leave this set to true for this demo
   },
 };
 
@@ -48,11 +59,39 @@ const OktaSignInWidget = ({ config, onSuccess, onError }) => {
     const widget = new OktaSignIn(config);
 
     widget
-      .showSignInToGetTokens({
+      .showSignIn({
         el: widgetRef.current,
       })
       .then(onSuccess)
       .catch(onError);
+
+    return () => widget.remove();
+  }, [config, onSuccess, onError]);
+
+  return <div ref={widgetRef} />;
+};
+
+const OktaSignUpWidget = ({ config, onSuccess, onError }) => {
+  const widgetRef = useRef();
+  useEffect(() => {
+    if (!widgetRef.current) return false;
+
+    const widget = new OktaSignIn(config);
+
+    widget
+      .showSignIn({
+        el: widgetRef.current,
+      })
+      .then(onSuccess)
+      .catch(onError);
+
+    widget.on('afterRender', function (data) {
+      // This is the code that makes it look as if the Okta Sign-In Widget has been loaded to the "Registration" view
+      const view = data.controller;
+      if (view == 'primary-auth') {
+        document.getElementsByClassName('registration-link')[0].click();
+      }
+    });
 
     return () => widget.remove();
   }, [config, onSuccess, onError]);
@@ -75,6 +114,23 @@ const Login = ({ config }) => {
   if (!authState) return null;
   // return <OktaSignInWidget config={config} onSuccess={onSuccess} onError={onError} />;
   return authState.isAuthenticated ? <Redirect to={{ pathname: '/' }} /> : <OktaSignInWidget config={config} onSuccess={onSuccess} onError={onError} />;
+};
+
+const SignUp = ({ config }) => {
+  const { oktaAuth, authState } = useOktaAuth();
+
+  const onSuccess = (tokens) => {
+    console.debug('Auth signin widget on success', tokens);
+    oktaAuth.handleLoginRedirect(tokens);
+  };
+
+  const onError = (err) => {
+    console.debug('error logging in', err);
+  };
+
+  if (!authState) return null;
+  // return <OktaSignInWidget config={config} onSuccess={onSuccess} onError={onError} />;
+  return authState.isAuthenticated ? <Redirect to={{ pathname: '/' }} /> : <OktaSignUpWidget config={config} onSuccess={onSuccess} onError={onError} />;
 };
 
 const AccountModal = () => {
@@ -118,7 +174,9 @@ const AccountModal = () => {
       case 'login':
         return <Login config={oktaSignInConfig} />;
       case 'create-account':
-        return <Registration />;
+        // return <Registration />;
+        return <SignUp config={oktaSignInConfig} />;
+
       case 'personal-details':
         return <PersonalDetails />;
       case 'choose-offer':
