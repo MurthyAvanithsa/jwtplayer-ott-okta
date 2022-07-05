@@ -18,14 +18,20 @@ import '@okta/okta-signin-widget/dist/css/okta-sign-in.min.css';
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 
 const oktaAuthConfig = {
-  // Note: If your app is configured to use the Implicit flow
-  // instead of the Authorization Code with Proof of Code Key Exchange (PKCE)
-  // you will need to add `pkce: false`
-  issuer: 'https://dev-00964696.okta.com/oauth2/default',
-  clientId: '0oa5bx8lok59myqWo5d7',
+  issuer: 'https://dev-60961954.okta.com/oauth2/default',
+  clientId: '0oa5luc7pzUMCi5sG5d7',
   redirectUri: window.location.origin + '/login/callback',
+  useInteractionCodeFlow: true,
+  // features: {
+  //   registration: true, // Enable self-service registration flow
+  //   rememberMe: true, // Setting to false will remove the checkbox to save username
+  //   //multiOptionalFactorEnroll: true,            // Allow users to enroll in multiple optional factors before finishing the authentication flow.
+  //   //selfServiceUnlock: true,                    // Will enable unlock in addition to forgotten password
+  //   //smsRecovery: true,                          // Enable SMS-based account recovery
+  //   //callRecovery: true,                         // Enable voice call-based account recovery
+  //   router: true, // Leave this set to true for this demo
+  // },
 };
-
 type Props = {
   error?: Error | null;
 };

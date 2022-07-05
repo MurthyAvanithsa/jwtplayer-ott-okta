@@ -160,6 +160,45 @@ export const afterLogin = async (sandbox: boolean, auth: AuthData) => {
   useAccountStore.setState({ loading: false });
 };
 
+export const afterOktaLogin = async (sandbox: boolean, oktaResponse: any) => {
+  console.debug('after okta login');
+
+  const accessToken = oktaResponse.accessToken.accessToken;
+
+  const response = await accountService.getCustomer({ customerId: '1001' }, sandbox, accessToken);
+
+  const responseMock = {
+    auth: {
+      jwt: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcklkIjo2NjA5MDM0NTYsInB1Ymxpc2hlcklkIjo1OTM3ODg5NTgsImV4cCI6MTY1NjU2NDAyMX0.WueQHLxAq-jF5ilEqe9XH66DCe-oPgzZfX4qZqARIYUQ7Xxrtl46R8iZSsl3UNNQRhY0Hmg3149etnTg7FfFuJVvTa5aU9A1fWW0jEI8_CwzbBPKsRIs_I6aW7tQvbe5foza7mJE-4ptyUCVsfUwI-6hbYPXknAxykgyQbF4UD5YZmvh82nwfGIxSw19RrzDbTabF0zYSDoFOgGEiQoqWRPD27Kkp98vZ25jN1Za9Aw5AeCPxui47l03Gpyx5o4BLYOjOUzqok1yYo3CzH9bmGAV4VVydtECe5Z08CP7b7jtuBPGUOil5K3OQenv7ALJm-Lfm8Ce6pD2Zs9zD_A_Lw',
+      refreshToken: 'e609ab258f8a6035c3ea6a970fb5019ef3367a4a44ae42c866f762a2dc0fc4cf',
+    },
+    user: {
+      id: 660903456,
+      email: 'murthy@svanpro.com',
+      firstName: 'Murthy',
+      lastName: 'Avanithsaa',
+      country: 'IN',
+      regDate: '2022-06-22 17:44:21',
+      lastLoginDate: '2022-06-30 06:24:28',
+      lastUserIp: '49.37.151.250',
+      externalId: '',
+      externalData: {
+        history: [{ tags: 'movie,Comedy', title: 'Big Buck Bunny', mediaid: 'awWEFyPu', duration: 596.5, progress: 0.1676646974015088 }],
+        favorites: [],
+      },
+    },
+  };
+
+  responseMock.auth.jwt = oktaResponse.accessToken.accessToken;
+
+  useAccountStore.setState(responseMock);
+
+  // await Promise.allSettled([getCustomerConsents(), getPublisherConsents()]);
+  await restoreFavorites();
+  await restoreWatchHistory();
+  useAccountStore.setState({ loading: false });
+};
+
 export const login = async (email: string, password: string) => {
   await useConfig(async ({ cleengId, cleengSandbox }) => {
     useAccountStore.setState({ loading: true });

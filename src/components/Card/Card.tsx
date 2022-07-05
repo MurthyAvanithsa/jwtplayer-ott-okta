@@ -1,9 +1,12 @@
 import React, { KeyboardEvent, memo } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 
 import { formatDurationTag } from '../../utils/formatting';
 import Lock from '../../icons/Lock';
+import Button from '../Button/Button';
+import { addQueryParam } from '../../utils/history';
 
 import styles from './Card.module.scss';
 
@@ -47,6 +50,8 @@ function Card({
   currentLabel,
 }: CardProps): JSX.Element {
   const { t } = useTranslation('common');
+  const history = useHistory();
+
   const cardClassName = classNames(styles.card, {
     [styles.featured]: featured,
     [styles.disabled]: disabled,
@@ -90,7 +95,15 @@ function Card({
             {featured && !disabled && enableTitle && <div className={classNames(styles.title, { [styles.loading]: loading })}>{title}</div>}
             <div className={styles.tags}>
               {isLocked && (
-                <div className={classNames(styles.tag, styles.lock)} aria-label={t('card_lock')}>
+                <div
+                  className={classNames(styles.tag, styles.lock)}
+                  aria-label={t('card_lock')}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    history.push(addQueryParam(history, 'u', 'login'));
+                  }}
+                >
+                  {/* <Button label="lock"></Button> */}
                   <Lock />
                 </div>
               )}

@@ -1,4 +1,4 @@
-export const getBaseUrl = (sandbox: boolean) => (sandbox ? 'https://mediastore-sandbox.cleeng.com' : 'https://mediastore.cleeng.com');
+export const getBaseUrl = (sandbox: boolean) => (sandbox ? 'http://localhost:4000' : 'https://mediastore.cleeng.com');
 
 export const performRequest = async (sandbox: boolean, path: string = '/', method = 'GET', body?: string, jwt?: string) => {
   try {

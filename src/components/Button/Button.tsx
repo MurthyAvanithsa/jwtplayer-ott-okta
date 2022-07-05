@@ -16,7 +16,7 @@ type Props = {
   fullWidth?: boolean;
   startIcon?: JSX.Element;
   variant?: Variant;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   tabIndex?: number;
   size?: 'medium' | 'large';
   to?: string;
